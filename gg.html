@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetra Cycle AGR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            animation: slideUp 1s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .btn {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0a58ca;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .result, .error {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .highlight-invalid {
+            border: 2px solid red;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Tetra Cycle AGR</h1>
+        <div class="info">
+            <p>
+                This application automatically detects water type and calculates water treatment steps based on analysis of heavy metal concentrations, sludge percentage, and more. Advanced techniques such as Brownian motion, aluminum sulfate coagulation, and activated carbon filtration are utilized.
+            </p>
+        </div>
+
+        <div class="image-container">
+            <img src="https://via.placeholder.com/800x300?text=Tetra+Cycle+AGR+Process" alt="Water Treatment Process">
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="lead" class="form-label">Lead Concentration (ppm)</label>
+                <input type="number" id="lead" class="form-control" placeholder="Enter lead concentration" min="0" oninput="validateInput(this); updateCalculation()">
+            </div>
+            <div class="col-md-6">
+                <label for="mercury" class="form-label">Mercury Concentration (ppm)</label>
+                <input type="number" id="mercury" class="form-control" placeholder="Enter mercury concentration" min="0" oninput="validateInput(this); updateCalculation()">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="silver" class="form-label">Silver Concentration (ppm)</label>
+                <input type="number" id="silver" class="form-control" placeholder="Enter silver concentration" min="0" oninput="validateInput(this); updateCalculation()">
+            </div>
+            <div class="col-md-6">
+                <label for="sludge" class="form-label">Sludge Percentage (%)</label>
+                <input type="number" id="sludge" class="form-control" placeholder="Enter sludge percentage" min="0" oninput="validateInput(this); updateCalculation()">
+            </div>
+        </div>
+
+        <div class="result" id="result"></div>
+        <div class="error" id="error"></div>
+
+        <canvas id="chartContainer"></canvas>
+
+        <div class="image-container">
+            <img src="https://via.placeholder.com/800x300?text=Advanced+Filtration+Techniques" alt="Advanced Filtration Techniques">
+        </div>
+    </div>
+
+    <script>
+        const FACTORS = {
+            carbonate: 0.8,
+            aluminumSulfate: 0.2,
+            filtrationTime: {
+                domestic: 30,
+                industrial: 60,
+                agricultural: 45
+            }
+        };
+
+        let chart;
+
+        function createChart() {
+            const ctx = document.getElementById('chartContainer').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Carbonate', 'Aluminum Sulfate'],
+                    datasets: [{
+                        label: 'Required Amount (%)',
+                        data: [0, 0],
+                        backgroundColor: ['#4CAF50', '#FF9800'],
+                        borderColor: ['#388E3C', '#F57C00'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    animation: {
+                        duration: 1000
+                    }
+                }
+            });
+        }
+
+        function updateChart(carbonate, aluminumSulfate) {
+            chart.data.datasets[0].data = [carbonate, aluminumSulfate];
+            chart.update();
+        }
+
+        function validateInput(input) {
+            if (isNaN(input.value) || input.value < 0) {
+                input.classList.add('highlight-invalid');
+            } else {
+                input.classList.remove('highlight-invalid');
+            }
+        }
+
+        function detectWaterType(lead, mercury, silver, sludge) {
+            if (lead > 10 || mercury > 5 || silver > 15) return 'industrial';
+            if (sludge > 20) return 'agricultural';
+            return 'domestic';
+        }
+
+        function updateCalculation() {
+            const lead = parseFloat(document.getElementById('lead').value) || 0;
+            const mercury = parseFloat(document.getElementById('mercury').value) || 0;
+            const silver = parseFloat(document.getElementById('silver').value) || 0;
+            const sludge = parseFloat(document.getElementById('sludge').value) || 0;
+
+            const waterType = detectWaterType(lead, mercury, silver, sludge);
+            const totalMetals = lead + mercury + silver;
+            const carbonateNeeded = totalMetals * FACTORS.carbonate;
+            const aluminumSulfateNeeded = sludge * FACTORS.aluminumSulfate;
+            const filtrationTime = FACTORS.filtrationTime[waterType];
+
+            const steps = [
+                'Add the required amount of carbonate to neutralize heavy metals.',
+                'Add aluminum sulfate for coagulation based on sludge percentage.',
+                'Use activated carbon to remove organic contaminants.',
+                'Introduce chlorine for disinfection.',
+                `Allow filtration for approximately ${filtrationTime} minutes.`
+            ];
+
+            document.getElementById('result').innerHTML = `
+                <p>Detected Water Type: <strong>${waterType.charAt(0).toUpperCase() + waterType.slice(1)}</strong></p>
+                <p>Total Heavy Metals: <strong>${totalMetals.toFixed(2)} ppm</strong></p>
+                <p>Carbonate Required: <strong>${carbonateNeeded.toFixed(2)}%</strong></p>
+                <p>Aluminum Sulfate Required: <strong>${aluminumSulfateNeeded.toFixed(2)}%</strong></p>
+                <p>Estimated Filtration Time: <strong>${filtrationTime} minutes</strong></p>
+                <ul>${steps.map(step => `<li>${step}</li>`).join('')}</ul>
+            `;
+
+            if (totalMetals > 0 && sludge > 0) {
+                updateChart(carbonateNeeded, aluminumSulfateNeeded);
+                document.getElementById('error').textContent = '';
+            } else {
+                document.getElementById('error').textContent = 'Please ensure all fields have valid values.';
+                updateChart(0, 0);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createChart();
+        });
+    </script>
+</body>
+</html>
