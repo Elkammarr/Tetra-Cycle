@@ -5,3 +5,5 @@ Total Heavy Metals:
 Carbonate Required:
 Aluminum Sulfate Required:
 Estimated Filtration Time:
+pH Level: 0
+Turbidit
