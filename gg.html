@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetra Cycle AGR</title>
+    <title>Tetra Cycle AGR - Advanced Water Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
+        /* Base styling for body */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
@@ -19,37 +21,43 @@
             animation: fadeIn 1s ease-in;
         }
 
+        /* Animation for page fade-in */
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
         }
 
+        /* Styling for the container */
         .container {
             background: #ffffff;
             border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             padding: 30px;
             width: 90%;
-            max-width: 800px;
+            max-width: 900px;
             text-align: center;
             animation: slideUp 1s ease-out;
         }
 
+        /* Animation for container sliding in */
         @keyframes slideUp {
             from {
                 transform: translateY(20px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
             }
         }
 
+        /* Styling for buttons */
         .btn {
             background-color: #0d6efd;
             color: white;
@@ -61,6 +69,7 @@
             transition: transform 0.2s, background-color 0.3s;
         }
 
+        /* Hover and active state for buttons */
         .btn:hover {
             background-color: #0a58ca;
             transform: scale(1.05);
@@ -70,14 +79,37 @@
             transform: scale(0.95);
         }
 
-        .result, .error {
+        /* Dark Mode Styling */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .container.dark-mode {
+            background: #1e1e1e;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-dark-mode {
+            margin-top: 15px;
+        }
+
+        .btn.dark-mode {
+            background-color: #bb86fc;
+        }
+
+        /* Error and result styling */
+        .result,
+        .error {
             transition: opacity 0.5s ease-in-out;
         }
 
+        /* Highlight invalid inputs */
         .highlight-invalid {
             border: 2px solid red;
         }
 
+        /* Image styling */
         .image-container img {
             max-width: 100%;
             height: auto;
@@ -86,58 +118,116 @@
             transition: transform 0.3s;
         }
 
+        /* Hover effect for images */
         .image-container img:hover {
             transform: scale(1.02);
+        }
+
+        .btn-strength {
+            margin-top: 20px;
+        }
+
+        .slider {
+            width: 100%;
+        }
+
+        .output {
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="container">
-        <h1>Tetra Cycle AGR</h1>
+        <h1>Tetra Cycle AGR - Advanced Water Analysis</h1>
+        <!-- Dark/Light mode toggle button -->
+        <button class="btn btn-dark-mode" id="darkModeToggle">Toggle Dark/Light Mode</button>
+
+        <!-- Strength mode button -->
+        <button class="btn btn-dark-mode btn-strength" id="strengthToggle">Toggle Lightness Mode</button>
+
         <div class="info">
             <p>
-                This application automatically detects water type and calculates water treatment steps based on analysis of heavy metal concentrations, sludge percentage, and more. Advanced techniques such as Brownian motion, aluminum sulfate coagulation, and activated carbon filtration are utilized.
+                Welcome to Tetra Cycle AGR! This advanced application automates the detection of water types and calculates treatment steps. It takes into account heavy metal concentrations, sludge levels, pH values, and more, providing optimal solutions.
+            </p>
+            <p>
+                The system utilizes Brownian motion simulations, aluminum sulfate coagulation, activated carbon filtration, and other advanced techniques to enhance water quality. Use the input fields below to analyze water samples and determine appropriate filtration and treatment protocols.
             </p>
         </div>
 
         <div class="image-container">
-            <img src="https://via.placeholder.com/800x300?text=Tetra+Cycle+AGR+Process" alt="Water Treatment Process">
+            <img src="https://via.placeholder.com/800x300?text=Tetra+Cycle+AGR+Water+Analysis" alt="Water Analysis Process">
         </div>
 
+        <h2>Input Parameters</h2>
+        <p>Provide data for water sample analysis to calculate treatment steps and filtration times.</p>
+
         <div class="row">
+            <!-- Input for Lead -->
             <div class="col-md-6">
                 <label for="lead" class="form-label">Lead Concentration (ppm)</label>
-                <input type="number" id="lead" class="form-control" placeholder="Enter lead concentration" min="0" oninput="validateInput(this); updateCalculation()">
+                <input type="number" id="lead" class="form-control" placeholder="Enter lead concentration (e.g., 5)" min="0" oninput="validateInput(this); updateCalculation()">
             </div>
+            <!-- Input for Mercury -->
             <div class="col-md-6">
                 <label for="mercury" class="form-label">Mercury Concentration (ppm)</label>
-                <input type="number" id="mercury" class="form-control" placeholder="Enter mercury concentration" min="0" oninput="validateInput(this); updateCalculation()">
+                <input type="number" id="mercury" class="form-control" placeholder="Enter mercury concentration (e.g., 3)" min="0" oninput="validateInput(this); updateCalculation()">
             </div>
         </div>
 
         <div class="row">
+            <!-- Input for Silver -->
             <div class="col-md-6">
                 <label for="silver" class="form-label">Silver Concentration (ppm)</label>
-                <input type="number" id="silver" class="form-control" placeholder="Enter silver concentration" min="0" oninput="validateInput(this); updateCalculation()">
+                <input type="number" id="silver" class="form-control" placeholder="Enter silver concentration (e.g., 12)" min="0" oninput="validateInput(this); updateCalculation()">
             </div>
+            <!-- Input for Sludge -->
             <div class="col-md-6">
                 <label for="sludge" class="form-label">Sludge Percentage (%)</label>
-                <input type="number" id="sludge" class="form-control" placeholder="Enter sludge percentage" min="0" oninput="validateInput(this); updateCalculation()">
+                <input type="number" id="sludge" class="form-control" placeholder="Enter sludge percentage (e.g., 25)" min="0" oninput="validateInput(this); updateCalculation()">
             </div>
         </div>
 
+        <div class="row">
+            <!-- Input for pH -->
+            <div class="col-md-6">
+                <label for="ph" class="form-label">pH Level</label>
+                <input type="number" id="ph" class="form-control" placeholder="Enter pH level (e.g., 7.2)" min="0" max="14" oninput="validateInput(this); updateCalculation()">
+            </div>
+            <!-- Input for Turbidity -->
+            <div class="col-md-6">
+                <label for="turbidity" class="form-label">Turbidity (NTU)</label>
+                <input type="number" id="turbidity" class="form-control" placeholder="Enter turbidity (e.g., 5)" min="0" oninput="validateInput(this); updateCalculation()">
+            </div>
+        </div>
+
+        <h2>Results</h2>
         <div class="result" id="result"></div>
         <div class="error" id="error"></div>
 
-        <canvas id="chartContainer"></canvas>
+        <!-- Graphs for pollutants and temperature -->
+        <h3>Temperature vs Pollutant Concentration</h3>
+        <canvas id="temperatureGraph"></canvas>
 
+        <h3>Pollutant Concentration Over Time</h3>
+        <canvas id="pollutantOverTimeGraph"></canvas>
+
+        <h3>pH vs Pollutant Concentration</h3>
+        <canvas id="phPollutantGraph"></canvas>
+
+        <h3>Turbidity vs Pollutant Concentration</h3>
+        <canvas id="turbidityPollutantGraph"></canvas>
+
+        <h2>Additional Visuals</h2>
         <div class="image-container">
-            <img src="https://via.placeholder.com/800x300?text=Advanced+Filtration+Techniques" alt="Advanced Filtration Techniques">
+            <img src="https://via.placeholder.com/800x300?text=Water+Treatment+Stages" alt="Water Treatment Stages">
         </div>
     </div>
 
     <script>
+        // Constants for calculations
         const FACTORS = {
             carbonate: 0.8,
             aluminumSulfate: 0.2,
@@ -145,28 +235,45 @@
                 domestic: 30,
                 industrial: 60,
                 agricultural: 45
+            },
+            temperatureRange: {
+                domestic: [20, 25],
+                industrial: [15, 20],
+                agricultural: [18, 22]
             }
         };
 
-        let chart;
+        let isStrengthMode = false;
+        let chart, tempChart, timeChart, phChart, turbidityChart;
 
-        function createChart() {
-            const ctx = document.getElementById('chartContainer').getContext('2d');
-            chart = new Chart(ctx, {
-                type: 'bar',
+        // Create and update the chart for pollutants
+        function createPollutantChart() {
+            const ctx = document.getElementById('temperatureGraph').getContext('2d');
+            tempChart = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: ['Carbonate', 'Aluminum Sulfate'],
+                    labels: Array.from({ length: 101 }, (_, i) => i), // Temperature from 0 to 100
                     datasets: [{
-                        label: 'Required Amount (%)',
-                        data: [0, 0],
-                        backgroundColor: ['#4CAF50', '#FF9800'],
-                        borderColor: ['#388E3C', '#F57C00'],
-                        borderWidth: 1
+                        label: 'Pollutant Concentration',
+                        data: Array.from({ length: 101 }, (_, i) => (i * 0.2)), // Adjust for simulation
+                        fill: false,
+                        borderColor: '#FF5733',
+                        tension: 0.1
                     }]
                 },
                 options: {
                     scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Temperature (°C)'
+                            }
+                        },
                         y: {
+                            title: {
+                                display: true,
+                                text: 'Pollutant Concentration (ppm)'
+                            },
                             beginAtZero: true
                         }
                     },
@@ -175,74 +282,201 @@
                             display: true,
                             position: 'top'
                         }
-                    },
-                    animation: {
-                        duration: 1000
                     }
                 }
             });
         }
 
-        function updateChart(carbonate, aluminumSulfate) {
-            chart.data.datasets[0].data = [carbonate, aluminumSulfate];
-            chart.update();
+        // Create chart for pollutant concentration over time
+        function createTimePollutantChart() {
+            const ctx = document.getElementById('pollutantOverTimeGraph').getContext('2d');
+            timeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 24 }, (_, i) => i), // Time from 0 to 23 hours
+                    datasets: [{
+                        label: 'Pollutant Concentration',
+                        data: Array.from({ length: 24 }, (_, i) => (i * 0.3)), // Simulate concentration over time
+                        fill: false,
+                        borderColor: '#33FF57',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time (hours)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Pollutant Concentration (ppm)'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
         }
 
-        function validateInput(input) {
-            if (isNaN(input.value) || input.value < 0) {
-                input.classList.add('highlight-invalid');
-            } else {
-                input.classList.remove('highlight-invalid');
-            }
+        // Create pH vs pollutant concentration graph
+        function createPhPollutantChart() {
+            const ctx = document.getElementById('phPollutantGraph').getContext('2d');
+            phChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 15 }, (_, i) => i + 1), // pH range from 1 to 15
+                    datasets: [{
+                        label: 'Pollutant Concentration',
+                        data: Array.from({ length: 15 }, (_, i) => (i * 0.5)), // Simulate relationship between pH and pollutants
+                        fill: false,
+                        borderColor: '#337ab7',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'pH Level'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Pollutant Concentration (ppm)'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
         }
 
-        function detectWaterType(lead, mercury, silver, sludge) {
-            if (lead > 10 || mercury > 5 || silver > 15) return 'industrial';
-            if (sludge > 20) return 'agricultural';
-            return 'domestic';
+        // Create Turbidity vs Pollutant Concentration graph
+        function createTurbidityPollutantChart() {
+            const ctx = document.getElementById('turbidityPollutantGraph').getContext('2d');
+            turbidityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 101 }, (_, i) => i), // Turbidity from 0 to 100 NTU
+                    datasets: [{
+                        label: 'Pollutant Concentration',
+                        data: Array.from({ length: 101 }, (_, i) => (i * 0.1)), // Simulate relationship between turbidity and pollutants
+                        fill: false,
+                        borderColor: '#f39c12',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Turbidity (NTU)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Pollutant Concentration (ppm)'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
         }
 
+        // Function to update chart data based on input
         function updateCalculation() {
-            const lead = parseFloat(document.getElementById('lead').value) || 0;
-            const mercury = parseFloat(document.getElementById('mercury').value) || 0;
-            const silver = parseFloat(document.getElementById('silver').value) || 0;
-            const sludge = parseFloat(document.getElementById('sludge').value) || 0;
+            // Fetch values from inputs and update graphs accordingly
+            let lead = parseFloat(document.getElementById('lead').value) || 0;
+            let mercury = parseFloat(document.getElementById('mercury').value) || 0;
+            let silver = parseFloat(document.getElementById('silver').value) || 0;
+            let sludge = parseFloat(document.getElementById('sludge').value) || 0;
+            let pH = parseFloat(document.getElementById('ph').value) || 0;
+            let turbidity = parseFloat(document.getElementById('turbidity').value) || 0;
 
-            const waterType = detectWaterType(lead, mercury, silver, sludge);
-            const totalMetals = lead + mercury + silver;
-            const carbonateNeeded = totalMetals * FACTORS.carbonate;
-            const aluminumSulfateNeeded = sludge * FACTORS.aluminumSulfate;
-            const filtrationTime = FACTORS.filtrationTime[waterType];
+            // Update graph based on lead
+            tempChart.data.datasets[0].data = Array.from({ length: 101 }, (_, i) => lead * 0.3);
+            tempChart.update();
 
-            const steps = [
-                'Add the required amount of carbonate to neutralize heavy metals.',
-                'Add aluminum sulfate for coagulation based on sludge percentage.',
-                'Use activated carbon to remove organic contaminants.',
-                'Introduce chlorine for disinfection.',
-                `Allow filtration for approximately ${filtrationTime} minutes.`
-            ];
+            // Update pollutant concentration over time graph
+            timeChart.data.datasets[0].data = Array.from({ length: 24 }, (_, i) => mercury * 0.25);
+            timeChart.update();
 
-            document.getElementById('result').innerHTML = `
-                <p>Detected Water Type: <strong>${waterType.charAt(0).toUpperCase() + waterType.slice(1)}</strong></p>
-                <p>Total Heavy Metals: <strong>${totalMetals.toFixed(2)} ppm</strong></p>
-                <p>Carbonate Required: <strong>${carbonateNeeded.toFixed(2)}%</strong></p>
-                <p>Aluminum Sulfate Required: <strong>${aluminumSulfateNeeded.toFixed(2)}%</strong></p>
-                <p>Estimated Filtration Time: <strong>${filtrationTime} minutes</strong></p>
-                <ul>${steps.map(step => `<li>${step}</li>`).join('')}</ul>
+            // Update pH vs pollutant graph
+            phChart.data.datasets[0].data = Array.from({ length: 15 }, (_, i) => (pH + i) * 0.2);
+            phChart.update();
+
+            // Update turbidity vs pollutant graph
+            turbidityChart.data.datasets[0].data = Array.from({ length: 101 }, (_, i) => (turbidity + i) * 0.1);
+            turbidityChart.update();
+
+            // Output results for display
+            const result = `
+                <p><strong>Lead Concentration:</strong> ${lead} ppm</p>
+                <p><strong>Mercury Concentration:</strong> ${mercury} ppm</p>
+                <p><strong>Silver Concentration:</strong> ${silver} ppm</p>
+                <p><strong>Sludge Percentage:</strong> ${sludge} %</p>
+                <p><strong>pH Level:</strong> ${pH}</p>
+                <p><strong>Turbidity:</strong> ${turbidity} NTU</p>
             `;
+            document.getElementById('result').innerHTML = result;
+        }
 
-            if (totalMetals > 0 && sludge > 0) {
-                updateChart(carbonateNeeded, aluminumSulfateNeeded);
-                document.getElementById('error').textContent = '';
+        // Handle Dark Mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function () {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('.container').classList.toggle('dark-mode');
+        });
+
+        // Handle Lightness mode toggle
+        document.getElementById('strengthToggle').addEventListener('click', function () {
+            isStrengthMode = !isStrengthMode;
+            document.body.style.backgroundColor = isStrengthMode ? '#ffffff' : '#2c3e50';
+        });
+
+        // Input validation
+        function validateInput(element) {
+            if (element.value < 0) {
+                element.classList.add('highlight-invalid');
             } else {
-                document.getElementById('error').textContent = 'Please ensure all fields have valid values.';
-                updateChart(0, 0);
+                element.classList.remove('highlight-invalid');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            createChart();
-        });
+        // Initialize all components
+        window.onload = function () {
+            createPollutantChart();
+            createTimePollutantChart();
+            createPhPollutantChart();
+            createTurbidityPollutantChart();
+        };
     </script>
 </body>
+
 </html>
