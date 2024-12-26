@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Image View</title>
+    <style>
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Set a max-width to control the size */
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: brightness(1.1) contrast(1.2) saturate(1.1); /* Apply brightness, contrast, and saturation enhancements */
+            transition: filter 0.3s ease; /* Smooth transition effect */
+        }
+
+        /* Optional: Add hover effect to enhance the image when hovered */
+        .image-container img:hover {
+            filter: brightness(1.2) contrast(1.4) saturate(1.2); /* Enhance further on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image-container">
+        <img src="https://storage.googleapis.com/jm-gcp-bethestory-p-12po-bucket/uploads/2023/09/sustainable-agriculture-family.jpg" alt="Agriculture Family">
+    </div>
+
+</body>
+</html>
